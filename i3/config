@@ -40,38 +40,43 @@ bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
-
+#Bright
+bindsym XF86MonBrightnessUp exec xbacklight +5 && killall dunst && notify-send "Brightness - $(xbacklight -get | cut -c1-2)%"
+bindsym XF86MonBrightnessDown exec xbacklight -5 && killall dunst && notify-send "Brightness - $(xbacklight -get | cut -c1-2)%"
+# bindsym XF86MonBrightnessUp exec xbacklight -inc 10
+# bindsym XF86MonBrightnessDown exec xbacklight -dec 10
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
 # move tiling windows via drag & drop by left-clicking into the title bar,
 # or left-clicking anywhere into the window while holding the floating modifier.
-tiling_drag modifier titlebar
 
+exec_always --no-startup-id autotiling
 # start a terminal
-bindsym $mod+Return exec kitty
-
+bindsym $mod+Return exec --no-startup-id kitty
 # kill focused window
-bindsym $mod+Shift+q kill
+bindsym $mod+q kill
 
+bindsym $mod+Shift+Return exec kitty --name floating_kitty 
+#floating enable; move position center; resize set 680 480
+# for_window [class="kitty"] floating disable, move position center, resize set 680 480
+ for_window [class="kitty" instance="floating_kitty"] floating enable, move position center, resize set 600 400 
 # start rofi (a program launcher)
 bindsym $mod+d exec --no-startup-id ~/.config/rofi/launchers/type-4/launcher.sh
 # start powermenu
 bindsym $mod+x exec --no-startup-id ~/.config/rofi/applets/bin/powermenu.sh
-#screenshot
-bindsym $mod+s exec --no-startup-id ~/.config/rofi/applets/bin/screenshot.sh
+# Hoặc có thể chụp toàn bộ màn hình và lưu vào clipboard
+bindsym $mod+s exec flameshot gui
 #wifimenu
 bindsym $mod+n exec --no-startup-id ~/.config/rofi/applets/bin/wifi.sh
+# Chụp ảnh màn hình và lưu vào thư mục ~/Pictures với tên file ngày và giờ
+bindsym Print exec scrot '%Y-%m-%d_%H:%M:%S.png' -e 'mv $f ~/Pictures/Screenshot'
+
 
 # bindcode $mod+40 exec "rofi -modi drun,run -show drun"
 # There also is i3-dmenu-desktop which only displays applications shipping a
 # .desktop file. It is a wrapper around dmenu, so you need that installed.
 # bindcode $mod+40 exec --no-startup-id i3-dmenu-desktop
-# Chụp ảnh màn hình và lưu vào thư mục ~/Pictures với tên file ngày và giờ
-bindsym Print exec scrot '%Y-%m-%d_%H:%M:%S.png' -e 'mv $f ~/Pictures/Screenshot'
-
-# Hoặc có thể chụp toàn bộ màn hình và lưu vào clipboard
-bindsym $mod+Print exec flameshot gui
 
 # change focus
 bindsym $mod+j focus left
@@ -111,7 +116,6 @@ bindsym $mod+e layout toggle split
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
-
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
 
@@ -195,10 +199,12 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 #bar {
-#       status_command i3status -c /home/nts/.config/i3status/i3status.conf
+#      status_command i3status -c /home/nts/.config/i3status/i3status.conf
 #}
 #Display Wallpaper
-exec_always feh --bg-fill /home/nts/Pictures/wallhaven-eyy73w_1366x768.png
+exec_always feh --bg-fill /home/nts/Pictures/themes/makima.png
+#exec_always --no-startup-id ~/dynamic-wallpaper/dwall.sh -s room
+# exec_always --no-startup-id ~/Pictures/chainSawMan.sh
 #Windown compositor
 exec_always picom -f
 #raps
