@@ -51,16 +51,23 @@ floating_modifier $mod
 # move tiling windows via drag & drop by left-clicking into the title bar,
 # or left-clicking anywhere into the window while holding the floating modifier.
 
-exec_always --no-startup-id autotiling
+# exec_always --no-startup-id autotiling
 # start a terminal
-bindsym $mod+Return exec --no-startup-id kitty
+# bindsym $mod+Return exec --no-startup-id kitty
 # kill focused window
 bindsym $mod+q kill
 
-bindsym $mod+Shift+Return exec kitty --name floating_kitty 
-#floating enable; move position center; resize set 680 480
-# for_window [class="kitty"] floating disable, move position center, resize set 680 480
- for_window [class="kitty" instance="floating_kitty"] floating enable, move position center, resize set 600 400 
+#open kitty
+bindsym $mod+Return exec kitty
+# Gán phím tắt cho mở cửa sổ Kitty và đặt vào chế độ float ngay lập tức
+bindsym $mod+Shift+Return exec kitty --name kitty_float 
+
+
+# Quy tắc float cho cửa sổ Kitty khi mở
+for_window [instance="kitty_float"] floating enable, move absolute position 366px 182px, resize set 625 411
+
+# bindsym $mod+Shift+Return exec kitty --name floating_kitty 
+#  for_window [class="kitty" instance="floating_kitty"] floating enable, move position center, resize set 600 400 
 # start rofi (a program launcher)
 bindsym $mod+d exec --no-startup-id ~/.config/rofi/launchers/type-4/launcher.sh
 # start powermenu
@@ -78,25 +85,26 @@ bindsym Print exec scrot '%Y-%m-%d_%H:%M:%S.png' -e 'mv $f ~/Pictures/Screenshot
 # .desktop file. It is a wrapper around dmenu, so you need that installed.
 # bindcode $mod+40 exec --no-startup-id i3-dmenu-desktop
 
-# change focus
+
+#Chuyển đổi chuột 
 bindsym $mod+j focus left
 bindsym $mod+k focus down
 bindsym $mod+l focus up
 bindsym $mod+semicolon focus right
 
-# alternatively, you can use the cursor keys:
+#Chuyển đổi chuột 
 bindsym $mod+Left focus left
 bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
-# move focused window
+#Chuyển đổi cửa sổ
 bindsym $mod+Shift+j move left
 bindsym $mod+Shift+k move down
 bindsym $mod+Shift+l move up
 bindsym $mod+Shift+semicolon move right
 
-# alternatively, you can use the cursor keys:
+#Chuyển đổi cửa sổ
 bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
@@ -210,13 +218,13 @@ exec_always picom -f
 #raps
 gaps inner 8
 gaps outer 0
-#mouse mod
-floating_modifier $mod
 #hide tab
 hide_edge_borders both
 #border
 for_window [class="^.*"] border pixel 0
 #polybar
-exec_always --no-startup-id ~/.config/polybar/launch.sh
+# exec_always --no-startup-id ~/.config/polybar/launch.sh
+exec --no-startup-id polybar example &
+
 
 
